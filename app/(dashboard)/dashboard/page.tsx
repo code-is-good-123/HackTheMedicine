@@ -6,14 +6,14 @@ import BentoCard from "@/components/ui/BentoCard";
 import TodayDosesGrid from "@/components/dashboard/TodayDosesGrid";
 import AlertBanner from "@/components/dashboard/AlertBanner";
 import PushNotificationManager from "@/components/dashboard/PushNotificationManager";
-import StatsBento from "@/components/dashboard/StatsBento";
-import QuickScanCTA from "@/components/dashboard/QuickScanCTA";
 import MedicationCard from "@/components/dashboard/MedicationCard";
 import Modal from "@/components/ui/Modal";
 import StepByStepAddMedicine from "@/components/scanner/StepByStepAddMedicine";
-import { Pill, Plus, ArrowRight, Sparkles } from "lucide-react";
+import { Pill, Plus, ArrowRight, Clock, Calendar } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function DashboardPage() {
+  const { data: session } = useSession();
   const [medications, setMedications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -41,102 +41,112 @@ export default function DashboardPage() {
     }
   };
 
+  const todayDateString = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
+
+  const userName = session?.user?.name || "Patient";
+
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6 pb-24 sm:pb-10 font-sans selection:bg-clinical-500 selection:text-white">
-      {/* Top Banner: Medication Alerts */}
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-6 pb-24 sm:pb-12 font-sans selection:bg-clinical-500 selection:text-white">
+      {/* Dynamic Overdue Alert Banner (Only appears when an overdue dose exists) */}
       <AlertBanner />
 
-      {/* Push Notification Manager & Activator */}
-      <PushNotificationManager />
+      {/* Top Greeting & Action Header */}
+      <div className="bg-white p-6 sm:p-7 rounded-3xl border-2 border-slate-900 shadow-[0_4px_0_0_#0f172a] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="bg-clinical-100 border border-slate-900 text-clinical-900 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+              <Calendar className="w-3 h-3 stroke-[2.5]" />
+              {todayDateString}
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
+            Welcome, {userName}
+          </h1>
+          <p className="text-xs font-bold text-slate-500">
+            Track daily doses, check verified FDA leaflets, and receive timely alerts.
+          </p>
+        </div>
 
-      {/* Main Bento Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {/* Today's Dosage Tracker (Spans 2 cols) */}
-        <BentoCard className="md:col-span-2 lg:col-span-2 bg-white p-6 sm:p-7 rounded-3xl shadow-[0_6px_0_0_#0f172a]">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <span className="bg-clinical-100 border border-slate-900 text-clinical-900 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider">
-                DAILY SCHEDULE
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Subtle compact push notification toggle */}
+          <PushNotificationManager variant="compact" />
+
+          {/* Primary Add Medicine CTA */}
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs uppercase tracking-wider rounded-2xl border-2 border-slate-900 shadow-[0_3px_0_0_#0f172a] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+          >
+            <Plus className="w-4 h-4 stroke-[3]" />
+            ADD MEDICINE
+          </button>
+        </div>
+      </div>
+
+      {/* Main 2-Column Clean Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column: Today's Schedule (7 cols on lg) */}
+        <BentoCard className="lg:col-span-7 bg-white p-6 sm:p-7 rounded-3xl shadow-[0_4px_0_0_#0f172a] flex flex-col justify-between">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b-2 border-slate-100">
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-clinical-600 stroke-[2.5]" />
+                <h2 className="text-lg font-black text-slate-900">
+                  Today&apos;s Doses
+                </h2>
+              </div>
+              <span className="text-[10px] font-black uppercase bg-slate-100 text-slate-800 border border-slate-900 px-2 py-0.5 rounded-md">
+                SCHEDULE
               </span>
-              <h2 className="text-xl font-black text-slate-900 mt-1">
-                Today&apos;s Doses
+            </div>
+
+            <TodayDosesGrid />
+          </div>
+        </BentoCard>
+
+        {/* Right Column: Active Cabinet (5 cols on lg) */}
+        <BentoCard className="lg:col-span-5 bg-white p-6 sm:p-7 rounded-3xl shadow-[0_4px_0_0_#0f172a] space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b-2 border-slate-100">
+            <div className="flex items-center gap-2">
+              <Pill className="w-5 h-5 text-clinical-600 stroke-[2.5]" />
+              <h2 className="text-lg font-black text-slate-900">
+                Prescription Cabinet
               </h2>
             </div>
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-black text-xs uppercase tracking-wider rounded-xl border-2 border-slate-900 shadow-[0_2px_0_0_#0f172a] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+            <Link
+              href="/medications"
+              className="text-xs font-black text-clinical-600 hover:text-clinical-700 inline-flex items-center gap-1 group"
             >
-              <Plus className="w-3.5 h-3.5 stroke-[3]" /> Add Dose
-            </button>
-          </div>
-          <TodayDosesGrid />
-        </BentoCard>
-
-        {/* Quick Scan Action Tile */}
-        <BentoCard className="bg-gradient-to-br from-clinical-600 via-clinical-700 to-slate-900 text-white p-6 sm:p-7 rounded-3xl shadow-[0_6px_0_0_#0f172a] flex flex-col justify-between">
-          <QuickScanCTA />
-        </BentoCard>
-
-        {/* Adherence & Streak Stats */}
-        <BentoCard className="bg-white p-6 sm:p-7 rounded-3xl shadow-[0_6px_0_0_#0f172a]">
-          <StatsBento />
-        </BentoCard>
-
-        {/* Recently Added Medications */}
-        <BentoCard className="md:col-span-3 lg:col-span-4 bg-white p-6 sm:p-8 rounded-3xl shadow-[0_6px_0_0_#0f172a] space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b-2 border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-clinical-50 border-2 border-slate-900 flex items-center justify-center text-clinical-600 shadow-[0_3px_0_0_#0f172a] shrink-0">
-                <Pill className="w-6 h-6 stroke-[2.5]" />
-              </div>
-              <div>
-                <span className="bg-emerald-100 border border-slate-900 text-emerald-950 px-2 py-0.5 rounded-md text-[10px] font-black uppercase">
-                  CABINET INVENTORY
-                </span>
-                <h3 className="text-xl font-black text-slate-900">
-                  Active Prescriptions ({medications.length})
-                </h3>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIsAddModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs uppercase tracking-wider rounded-2xl border-2 border-slate-900 shadow-[0_4px_0_0_#0f172a] active:translate-y-1 active:shadow-none transition-all cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4 stroke-[2.5]" />
-                ADD MEDICINE
-              </button>
-
-              <Link
-                href="/medications"
-                className="inline-flex items-center gap-1.5 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-900 font-black text-xs uppercase tracking-wider rounded-2xl border-2 border-slate-900 shadow-[0_4px_0_0_#0f172a] active:translate-y-1 active:shadow-none transition-all"
-              >
-                VIEW ALL <ArrowRight className="w-4 h-4 stroke-[3]" />
-              </Link>
-            </div>
+              All ({medications.length})
+              <ArrowRight className="w-3.5 h-3.5 stroke-[3] group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
 
           {loading ? (
-            <div className="py-8 text-center text-xs font-bold text-slate-400">
-              Loading active medications...
+            <div className="py-12 text-center text-xs font-bold text-slate-400">
+              Loading cabinet from database...
             </div>
           ) : medications.length === 0 ? (
-            <div className="text-center py-12 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-300 p-6 space-y-3">
-              <Pill className="w-10 h-10 text-slate-400 mx-auto" />
-              <p className="text-base font-black text-slate-800">Your cabinet is currently empty</p>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto font-semibold">
-                Scan package barcodes or enter any medicine name to decode leaf-lets and track your doses.
-              </p>
+            <div className="text-center py-10 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 p-5 space-y-3">
+              <Pill className="w-8 h-8 text-slate-400 mx-auto" />
+              <div>
+                <p className="text-sm font-black text-slate-800">Cabinet is Empty</p>
+                <p className="text-xs text-slate-500 font-semibold mt-0.5">
+                  Scan a barcode or enter a medicine name to add it to your daily routine.
+                </p>
+              </div>
               <button
                 onClick={() => setIsAddModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-clinical-500 text-white font-black text-xs uppercase tracking-wider rounded-2xl border-2 border-slate-900 shadow-[0_3px_0_0_#0f172a]"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-clinical-500 hover:bg-clinical-400 text-white font-black text-xs uppercase tracking-wider rounded-xl border-2 border-slate-900 shadow-[0_2px_0_0_#0f172a] cursor-pointer"
               >
-                <Plus className="w-4 h-4 stroke-[3]" /> Add Your First Medicine
+                <Plus className="w-3.5 h-3.5 stroke-[3]" /> Add Medicine
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="space-y-3.5">
               {medications.slice(0, 3).map((med) => (
                 <MedicationCard key={med._id} medication={med} onDelete={handleDelete} />
               ))}
@@ -145,11 +155,11 @@ export default function DashboardPage() {
         </BentoCard>
       </div>
 
-      {/* Modal for Step-by-Step Add Medicine */}
+      {/* Step-by-Step Add Medicine Modal */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title="Add New Medicine"
+        title="Add Medicine"
       >
         <StepByStepAddMedicine
           onComplete={() => {

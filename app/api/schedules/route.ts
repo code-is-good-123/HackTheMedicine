@@ -14,9 +14,7 @@ export async function GET(req: NextRequest) {
       await connectDB();
       if (isDbConnected()) {
         const schedules = await Schedule.find({ userId, active: true }).populate("medicationId");
-        if (schedules && schedules.length > 0) {
-          return NextResponse.json({ success: true, data: schedules });
-        }
+        return NextResponse.json({ success: true, data: schedules || [] });
       }
     } catch (dbErr) {
       console.warn("MongoDB schedules query failed, using in-memory:", dbErr);
@@ -57,17 +55,11 @@ export async function POST(req: NextRequest) {
     try {
       await connectDB();
       if (isDbConnected()) {
-        // Upsert schedule
         const updated = await Schedule.findOneAndUpdate(
           { userId, medicationId },
           schedData,
           { upsert: true, new: true }
         ).populate("medicationId");
-
-        mockStore.addSchedule({
-          _id: updated._id.toString(),
-          ...schedData,
-        });
 
         return NextResponse.json({ success: true, data: updated }, { status: 201 });
       }

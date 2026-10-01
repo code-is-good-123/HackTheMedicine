@@ -11,12 +11,17 @@ function getNotificationPermission(): NotificationPermission {
 }
 
 function subscribeToPermission(callback: () => void) {
-  // Window event listener dummy subscription
   window.addEventListener("focus", callback);
   return () => window.removeEventListener("focus", callback);
 }
 
-export default function PushNotificationManager() {
+interface PushNotificationManagerProps {
+  variant?: "banner" | "compact";
+}
+
+export default function PushNotificationManager({
+  variant = "banner",
+}: PushNotificationManagerProps) {
   const permission = useSyncExternalStore(
     subscribeToPermission,
     getNotificationPermission,
@@ -34,8 +39,8 @@ export default function PushNotificationManager() {
       const gain = ctx.createGain();
 
       osc.type = "sine";
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12); // A5
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
       gain.gain.setValueAtTime(0.15, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
 
@@ -44,7 +49,7 @@ export default function PushNotificationManager() {
       osc.start();
       osc.stop(ctx.currentTime + 0.5);
     } catch {
-      // Audio autoplay policy fallback
+      // Audio fallback
     }
   }, []);
 
@@ -53,14 +58,12 @@ export default function PushNotificationManager() {
     try {
       const result = await Notification.requestPermission();
       if (result === "granted") {
-        // Register token with backend
         fetch("/api/notifications", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: "web_push_granted_" + Date.now() }),
         }).catch(console.warn);
 
-        // Send confirmation push notification
         new Notification("🔔 Medicine Reminders Activated!", {
           body: "You will receive real-time push alerts when it is time to take your medication.",
           icon: "/logo.png",
@@ -96,7 +99,7 @@ export default function PushNotificationManager() {
         });
         playChime();
         setTestSent(true);
-        setTimeout(() => setTestSent(false), 4000);
+        setTimeout(() => setTestSent(false), 3000);
       }
     } catch (err) {
       console.error("Failed to send test push notification:", err);
@@ -135,6 +138,42 @@ export default function PushNotificationManager() {
   }, [permission, playChime]);
 
   if (!isSupported) return null;
+
+  if (variant === "compact") {
+    return (
+      <div className="flex items-center gap-2">
+        {permission !== "granted" ? (
+          <button
+            onClick={requestPermission}
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-black text-xs uppercase tracking-wider rounded-xl border-2 border-slate-900 shadow-[0_2px_0_0_#0f172a] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+            title="Enable browser notifications"
+          >
+            <Bell className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="hidden sm:inline">ENABLE ALERTS</span>
+          </button>
+        ) : (
+          <button
+            onClick={sendTestNotification}
+            disabled={testSent}
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-100 text-slate-800 font-black text-xs uppercase tracking-wider rounded-xl border-2 border-slate-900 shadow-[0_2px_0_0_#0f172a] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer disabled:opacity-70"
+            title="Test push notification"
+          >
+            {testSent ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
+                <span className="text-emerald-700">TEST SENT!</span>
+              </>
+            ) : (
+              <>
+                <BellRing className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
+                <span className="hidden sm:inline">ALERTS ACTIVE</span>
+              </>
+            )}
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-4 rounded-3xl border-2 border-slate-900 shadow-[0_4px_0_0_#0f172a] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">

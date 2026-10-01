@@ -14,9 +14,7 @@ export async function GET(req: NextRequest) {
       await connectDB();
       if (isDbConnected()) {
         const meds = await Medication.find({ userId }).sort({ createdAt: -1 });
-        if (meds && meds.length > 0) {
-          return NextResponse.json({ success: true, data: meds });
-        }
+        return NextResponse.json({ success: true, data: meds || [] });
       }
     } catch (dbErr) {
       console.warn("MongoDB medications query failed, using in-memory:", dbErr);
@@ -56,11 +54,6 @@ export async function POST(req: NextRequest) {
       await connectDB();
       if (isDbConnected()) {
         const created = await Medication.create(medData);
-        // Sync to mock store as well
-        mockStore.addMedication({
-          _id: created._id.toString(),
-          ...medData,
-        });
         return NextResponse.json({ success: true, data: created }, { status: 201 });
       }
     } catch (dbErr) {
