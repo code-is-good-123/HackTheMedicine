@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Check, Clock, Pill, Loader2 } from "lucide-react";
+import { Check, Pill, Loader2 } from "lucide-react";
 
 interface ScheduleDose {
   scheduleId: string;
@@ -132,40 +132,32 @@ export default function TodayDosesGrid() {
         return (
           <div
             key={key}
-            className={`p-3 sm:p-3.5 rounded-2xl border-2 border-slate-900 shadow-[0_3px_0_0_#0f172a] flex flex-col xs:flex-row xs:items-center justify-between gap-3 transition-all ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-slate-900 shadow-[0_3px_0_0_#0f172a] flex flex-col xs:flex-row xs:items-center justify-between gap-3 transition-all ${
               isTaken ? "bg-slate-100 opacity-80" : "bg-white"
             }`}
           >
-            <div className="flex items-center gap-3 min-w-0">
-              <div
-                className={`w-10 h-10 rounded-xl border-2 border-slate-900 flex items-center justify-center font-black text-xs shrink-0 ${
-                  isTaken ? "bg-slate-200 text-slate-600" : "bg-clinical-100 text-clinical-900"
+            <div className="min-w-0 overflow-hidden space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="bg-clinical-100 border border-slate-900 text-clinical-900 px-2 py-0.5 rounded-md text-xs font-black">
+                  {dose.time}
+                </span>
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-slate-200 text-slate-800 truncate">
+                  {dose.dosage}
+                </span>
+              </div>
+              <h4
+                className={`text-sm sm:text-base font-black text-slate-900 truncate ${
+                  isTaken ? "line-through text-slate-500" : ""
                 }`}
               >
-                <Clock className="w-4 h-4 stroke-[2.5]" />
-              </div>
-
-              <div className="min-w-0 overflow-hidden">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-black text-slate-900">{dose.time}</span>
-                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-slate-200 text-slate-800 truncate">
-                    {dose.dosage}
-                  </span>
-                </div>
-                <h4
-                  className={`text-sm font-black text-slate-900 truncate mt-0.5 ${
-                    isTaken ? "line-through text-slate-500" : ""
-                  }`}
-                >
-                  {dose.medicationName}
-                </h4>
-              </div>
+                {dose.medicationName}
+              </h4>
             </div>
 
             <button
               onClick={() => handleToggleTake(dose)}
               disabled={isUpdating}
-              className={`w-full xs:w-auto shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border-2 border-slate-900 font-black text-xs uppercase tracking-wider shadow-[0_2px_0_0_#0f172a] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer ${
+              className={`w-full xs:w-auto shrink-0 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-slate-900 font-black text-xs uppercase tracking-wider shadow-[0_2px_0_0_#0f172a] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer ${
                 isTaken
                   ? "bg-slate-300 hover:bg-slate-400 text-slate-800"
                   : "bg-emerald-400 hover:bg-emerald-300 text-slate-900"
