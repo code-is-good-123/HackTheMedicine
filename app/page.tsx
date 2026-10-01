@@ -1,212 +1,211 @@
+import Image from "next/image";
 import Link from "next/link";
-import Image from "next/image"
 import {
-	Pill,
-	ScanLine,
-	Sparkles,
-	ShieldCheck,
-	Clock,
-	ArrowRight,
-	Activity,
-	CheckCircle2,
-	HeartPulse,
+  ScanLine,
+  Sparkles,
+  Clock,
+  ArrowRight,
+  ShieldAlert,
+  CheckCircle2,
+  BellRing,
+  AlertTriangle,
+  Check,
 } from "lucide-react";
 
 export default function LandingPage() {
-	return (
-		<div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-clinical-500 selection:text-white">
-			{/* Top Navbar */}
-			<header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-slate-200/80 px-6 py-4">
-				<div className="max-w-6xl mx-auto flex items-center justify-between">
-					<div className="flex items-center gap-2.5">
-						<div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center p-1.5 border border-slate-200">
-							<Image
-								src="/logo.png"
-								alt="Hack The Medicine Logo"
-								width={32}
-								height={32}
-								className="object-contain"
-							/>
-						</div>
-						<span className="font-bold text-lg tracking-tight text-slate-900">
-							Hack The Medicine
-						</span>
-					</div>
+  return (
+    <div className="min-h-screen bg-[#F4F7FB] text-slate-900 font-sans selection:bg-clinical-500 selection:text-white flex flex-col justify-between">
+      {/* Top Navbar */}
+      <header className="sticky top-0 z-50 bg-white border-b-2 border-slate-900 px-6 py-4">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-2xl bg-clinical-50 border-2 border-slate-900 p-1 flex items-center justify-center shadow-[0_3px_0_0_#0f172a] group-hover:translate-y-0.5 group-hover:shadow-[0_1px_0_0_#0f172a] transition-all">
+              <Image
+                src="/logo.png"
+                alt="Hack The Medicine Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+                priority
+              />
+            </div>
+            <span className="font-extrabold text-xl tracking-tight text-slate-900">
+              Hack The Medicine
+            </span>
+          </Link>
 
-					<div className="flex items-center gap-3">
-						<Link
-							href="/login"
-							className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-						>
-							Sign In
-						</Link>
-						<Link
-							href="/register"
-							className="px-4 py-2 text-sm font-semibold text-white bg-clinical-500 hover:bg-clinical-600 rounded-xl shadow-md shadow-clinical-500/20 active:scale-95 transition-all"
-						>
-							Get Started
-						</Link>
-					</div>
-				</div>
-			</header>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-colors"
+            >
+              LOG IN
+            </Link>
+            <Link
+              href="/register"
+              className="px-5 py-2.5 text-xs font-black tracking-wider uppercase text-white bg-clinical-500 hover:bg-clinical-400 rounded-2xl border-2 border-slate-900 shadow-[0_4px_0_0_#0f172a] active:translate-y-1 active:shadow-none transition-all"
+            >
+              GET STARTED
+            </Link>
+          </div>
+        </div>
+      </header>
 
-			{/* Main Content / Bento Hero */}
-			<main className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-16 flex-1">
-				{/* Hero Section */}
-				<section className="text-center space-y-6 max-w-3xl mx-auto">
-					<div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-clinical-50 text-clinical-700 border border-clinical-200 text-xs font-semibold uppercase tracking-wider">
-						<Sparkles className="w-4 h-4 text-clinical-500" />
-						AI-Powered Medication Intelligence
-					</div>
+      {/* Main Content */}
+      <main className="max-w-5xl mx-auto px-6 py-16 md:py-24 space-y-20 md:space-y-28 flex-1 w-full">
+        {/* Hero Section */}
+        <section className="text-center max-w-2xl mx-auto pt-6">
+          <div className="space-y-6">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              Understand your medicine in{" "}
+              <span className="text-clinical-600 underline decoration-clinical-300 decoration-wavy underline-offset-8">
+                plain English
+              </span>
+            </h1>
 
-					<h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
-						Understand Your Prescriptions in{" "}
-						<span className="text-clinical-600">Plain English</span>
-					</h1>
+            <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed max-w-xl mx-auto">
+              Scan any prescription or medicine package to decode body effects,
+              dosages, and get real-time safety and overdue dosage alerts.
+            </p>
+          </div>
 
-					<p className="text-base md:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-						Scan any medicine barcode or prescription to instantly translate
-						complex medical jargon into clear, actionable body effects, dosage
-						schedules, and side effect warnings.
-					</p>
+          <div className="pt-10 md:pt-12 pb-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/register"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs uppercase tracking-wider rounded-2xl border-2 border-slate-900 shadow-[0_4px_0_0_#0f172a] active:translate-y-1 active:shadow-none transition-all"
+            >
+              START SCANNING FREE
+              <ArrowRight className="w-4 h-4 stroke-[3]" />
+            </Link>
+          </div>
+        </section>
 
-					<div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-						<Link
-							href="/register"
-							className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-clinical-500 hover:bg-clinical-600 text-white font-semibold rounded-2xl shadow-lg shadow-clinical-500/25 active:scale-95 transition-all text-sm"
-						>
-							Start Scanning Free
-							<ArrowRight className="w-4 h-4" />
-						</Link>
-						<Link
-							href="/login"
-							className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-2xl border border-slate-200 active:scale-95 transition-all text-sm"
-						>
-							Explore Dashboard
-						</Link>
-					</div>
-				</section>
+        {/* Bento Grid */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Tile 1: Safety Engine Banner */}
+          <div className="md:col-span-3 bg-rose-50/80 rounded-3xl p-6 sm:p-8 border-2 border-slate-900 shadow-[0_6px_0_0_#0f172a] space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-2xl bg-rose-100 border-2 border-slate-900 flex items-center justify-center text-rose-600 shadow-[0_3px_0_0_#0f172a] shrink-0">
+                  <BellRing className="w-6 h-6 stroke-[2.5] animate-bounce" />
+                </div>
+                <div>
+                  <span className="bg-rose-200 border border-slate-900 text-rose-900 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                    SAFETY ENGINE
+                  </span>
+                  <h3 className="text-2xl font-black text-slate-900">
+                    Real-Time Dosage & Overdue Alert System
+                  </h3>
+                </div>
+              </div>
+              <p className="text-xs font-bold text-slate-600 max-w-md">
+                Never double-dose or miss critical prescription timings. Receive
+                immediate tactile alerts for overdue medications with one-tap
+                status logging.
+              </p>
+            </div>
 
-				{/* Bento Grid Feature Highlights */}
-				<section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-					{/* Tile 1: Instant Barcode Scanner */}
-					<div className="md:col-span-2 bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-						<div className="space-y-4">
-							<div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center">
-								<ScanLine className="w-6 h-6" />
-							</div>
-							<h3 className="text-2xl font-bold text-slate-900">
-								Point, Scan & Decode
-							</h3>
-							<p className="text-slate-600 text-sm leading-relaxed max-w-md">
-								Scan UPC barcodes or drug package codes. Our engine checks
-								official FDA databases and RxNorm registries in milliseconds to
-								fetch accurate pharmacological profiles.
-							</p>
-						</div>
+            <div className="bg-white rounded-2xl p-5 border-2 border-slate-900 shadow-[0_3px_0_0_#0f172a] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-rose-100 border-2 border-slate-900 flex items-center justify-center text-rose-600 shrink-0">
+                  <AlertTriangle className="w-5 h-5 stroke-[2.5]" />
+                </div>
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-rose-500 text-white px-2 py-0.5 rounded-md text-[10px] font-black uppercase">
+                      OVERDUE 45 MINS
+                    </span>
+                    <span className="text-xs font-black text-slate-900">
+                      Amoxicillin 500mg
+                    </span>
+                  </div>
+                  <p className="text-xs font-bold text-slate-600">
+                    Take 1 capsule with full glass of water after food.
+                  </p>
+                </div>
+              </div>
 
-						<div className="mt-8 p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-4 text-xs font-mono text-slate-500">
-							<span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
-							<span>
-								barcode: 030045044904 → FDA Database hit → Summarizing with
-								Gemini AI...
-							</span>
-						</div>
-					</div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-400 text-slate-900 font-black text-xs uppercase tracking-wider rounded-xl border-2 border-slate-900 shadow-[0_2px_0_0_#0f172a]">
+                <Check className="w-4 h-4 stroke-[3]" />
+                LOG AS TAKEN
+              </div>
+            </div>
+          </div>
 
-					{/* Tile 2: Plain English Summaries */}
-					<div className="bg-gradient-to-br from-clinical-500 to-clinical-700 text-white rounded-3xl p-8 shadow-lg shadow-clinical-500/15 flex flex-col justify-between">
-						<div className="space-y-4">
-							<div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center">
-								<Sparkles className="w-6 h-6" />
-							</div>
-							<h3 className="text-xl font-bold">Zero Medical Jargon</h3>
-							<p className="text-clinical-100 text-sm leading-relaxed">
-								No more reading 10-page dense leaflets. Get 5 key insights:
-								purpose, body effect, treated conditions, side effects, and
-								warnings.
-							</p>
-						</div>
+          {/* Tile 2: Point, Scan & Decode */}
+          <div className="md:col-span-2 bg-white rounded-3xl p-8 border-2 border-slate-900 shadow-[0_6px_0_0_#0f172a] flex flex-col justify-between space-y-6">
+            <div className="space-y-3">
+              <div className="w-14 h-14 rounded-2xl bg-sky-100 border-2 border-slate-900 flex items-center justify-center text-sky-600 shadow-[0_3px_0_0_#0f172a]">
+                <ScanLine className="w-7 h-7 stroke-[2.5]" />
+              </div>
+              <h3 className="text-2xl font-black text-slate-900">
+                Point, Scan & Decode
+              </h3>
+              <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                Scan package barcodes or type the medicine name. Our engine
+                queries official openFDA databases and converts complex medical
+                leaflets into plain English.
+              </p>
+            </div>
 
-						<div className="mt-6 pt-4 border-t border-white/20 text-xs text-clinical-100 flex items-center gap-2">
-							<ShieldCheck className="w-4 h-4 text-white" /> Verified against
-							official openFDA labels
-						</div>
-					</div>
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-900 text-emerald-900 font-bold text-xs">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+              <span>
+                Instant FDA database lookups with clear body-effect breakdowns
+              </span>
+            </div>
+          </div>
 
-					{/* Tile 3: Dose Schedules & Reminders */}
-					<div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
-						<div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
-							<Clock className="w-6 h-6" />
-						</div>
-						<h3 className="text-xl font-bold text-slate-900">
-							Smart Timing & Streak Tracker
-						</h3>
-						<p className="text-slate-600 text-sm leading-relaxed">
-							Set custom dose schedules with morning/evening triggers. Keep high
-							adherence streaks with one-tap status logs.
-						</p>
-					</div>
+          {/* Tile 3: Gemini AI 5-Point Clarity */}
+          <div className="bg-clinical-500 text-white rounded-3xl p-8 border-2 border-slate-900 shadow-[0_6px_0_0_#0f172a] flex flex-col justify-between space-y-6">
+            <div className="space-y-3">
+              <div className="w-14 h-14 rounded-2xl bg-white border-2 border-slate-900 flex items-center justify-center text-clinical-600 shadow-[0_3px_0_0_#0f172a]">
+                <Sparkles className="w-7 h-7 stroke-[2.5]" />
+              </div>
+              <h3 className="text-2xl font-black text-white">5-Point Clarity</h3>
+              <p className="text-clinical-100 font-medium text-sm leading-relaxed">
+                Gemini AI summarizes medicine into 5 facts: purpose, body effect,
+                treated conditions, side effects, and warnings.
+              </p>
+            </div>
 
-					{/* Tile 4: Clinical Safety Alerts */}
-					<div className="md:col-span-2 bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 hover:shadow-md transition-shadow">
-						<div className="space-y-3">
-							<div className="inline-flex items-center gap-2 text-rose-600 bg-rose-50 px-3 py-1 rounded-lg text-xs font-semibold">
-								<HeartPulse className="w-4 h-4" /> Real-time Alert System
-							</div>
-							<h3 className="text-xl font-bold text-slate-900">
-								Safety First: Overdue & Conflict Alerts
-							</h3>
-							<p className="text-slate-600 text-sm leading-relaxed max-w-lg">
-								Never miss critical medication timings. Recovers missed
-								schedules with automated status badges and safety prompts.
-							</p>
-						</div>
+            <div className="pt-3 border-t-2 border-clinical-400/50 flex items-center gap-2 text-xs font-bold text-clinical-100">
+              <ShieldAlert className="w-4 h-4 text-white" /> Medical Safety
+              Guidelines
+            </div>
+          </div>
 
-						<div className="w-full sm:w-48 bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
-							<div className="flex items-center justify-between text-xs">
-								<span className="font-semibold text-slate-700">
-									Adherence Score
-								</span>
-								<span className="text-emerald-600 font-bold">96%</span>
-							</div>
-							<div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-								<div className="bg-emerald-500 h-full w-[96%]" />
-							</div>
-							<p className="text-[10px] text-slate-400 text-right">
-								12-day active streak
-							</p>
-						</div>
-					</div>
-				</section>
+          {/* Tile 4: CTA Banner */}
+          <div className="md:col-span-3 bg-emerald-400 rounded-3xl p-8 border-2 border-slate-900 shadow-[0_6px_0_0_#0f172a] flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 text-center sm:text-left">
+              <div className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-900 flex items-center justify-center text-emerald-700 shadow-[0_3px_0_0_#0f172a] mx-auto sm:mx-0">
+                <Clock className="w-6 h-6 stroke-[2.5]" />
+              </div>
+              <h3 className="text-2xl font-black text-slate-900">
+                Ready to organize your daily medications?
+              </h3>
+              <p className="text-slate-900 font-bold text-sm leading-relaxed max-w-xl">
+                Set dose schedules, track streaks, and scan prescriptions for
+                free.
+              </p>
+            </div>
 
-				{/* Value List Banner */}
-				<section className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
-					<div className="space-y-2 text-center md:text-left">
-						<h3 className="text-2xl font-bold text-slate-900">
-							Ready to simplify your medicine intake?
-						</h3>
-						<p className="text-sm text-slate-500">
-							Free to use, privacy-focused, and built with clinical clarity.
-						</p>
-					</div>
+            <Link
+              href="/register"
+              className="px-6 py-4 bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-wider rounded-2xl border-2 border-slate-900 shadow-[0_4px_0_0_#0f172a] active:translate-y-1 active:shadow-none transition-all whitespace-nowrap"
+            >
+              CREATE YOUR CABINET NOW
+            </Link>
+          </div>
+        </section>
+      </main>
 
-					<Link
-						href="/register"
-						className="px-6 py-3.5 bg-clinical-500 hover:bg-clinical-600 text-white font-semibold rounded-2xl shadow-md shadow-clinical-500/20 active:scale-95 transition-all text-sm whitespace-nowrap"
-					>
-						Create Your Cabinet Now
-					</Link>
-				</section>
-			</main>
-
-			{/* Minimal Footer */}
-			<footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-400">
-				<p>
-					© {new Date().getFullYear()} Hack The Medicine. Built for clear
-					medical intelligence.
-				</p>
-			</footer>
-		</div>
-	);
+      {/* Footer */}
+      <footer className="border-t-2 border-slate-900 bg-white py-6 text-center">
+        <p className="text-xs font-extrabold text-slate-600 tracking-wide">
+          © {new Date().getFullYear()} Hack The Medicine • Simple & Tactile Healthcare Intelligence
+        </p>
+      </footer>
+    </div>
+  );
 }
