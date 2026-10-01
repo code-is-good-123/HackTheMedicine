@@ -14,6 +14,10 @@ pnpm dev
 bun dev
 ```
 
+mrunknown01789_db_user, 2j7Ju6yDVp5TMNLi
+
+mongodb+srv://<db_username>:2j7Ju6yDVp5TMNLi@cluster0.lifma5b.mongodb.net/
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

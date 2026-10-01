@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Font Family Setup */
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Custom Clinical Theme Color Palette */
+  --color-clinical-50: #f0f9ff;
+  --color-clinical-100: #e0f2fe;
+  --color-clinical-500: #0284c7;
+  --color-clinical-600: #0284c7;
+  --color-clinical-900: #0c4a6e;
+  --color-clinical-slate: #0f172a;
+  --color-clinical-card: #ffffff;
+  --color-clinical-border: #e2e8f0;
+  --color-clinical-accent: #10b981;
+  --color-clinical-warning: #f59e0b;
+  --color-clinical-danger: #ef4444;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #090d16;
+    --foreground: #f8fafc;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Bento Grid & Glassmorphism Utilities */
+.bento-card {
+  background-color: var(--color-clinical-card);
+  border: 1px solid var(--color-clinical-border);
+  border-radius: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.bento-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.08);
 }
