@@ -1,0 +1,7 @@
+{
+  "name": "Hack The Medicine",
+  "description": "AI-Powered Smart Medicine Scanner & Tracker for dosage schedules, medication safety alerts, and clear medicine breakdowns.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
