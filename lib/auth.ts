@@ -15,46 +15,53 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Please enter both email and password");
+          throw new Error("Please enter both email and password.");
         }
 
         const email = credentials.email.toLowerCase().trim();
+        const enteredPassword = credentials.password;
 
         // 1. Try MongoDB if connected
         try {
           await connectDB();
           if (isDbConnected()) {
             const user = await User.findOne({ email }).select("+password");
-            if (user && user.password) {
-              const isValid = await bcrypt.compare(credentials.password, user.password);
-              if (isValid) {
-                return {
-                  id: user._id.toString(),
-                  name: user.name,
-                  email: user.email,
-                  image: user.image,
-                };
+            if (user) {
+              if (!user.password) {
+                return null;
               }
+              const isMatch = await bcrypt.compare(enteredPassword, user.password);
+              if (!isMatch) {
+                // Explicitly return null or throw so NextAuth triggers an error
+                return null;
+              }
+              return {
+                id: user._id.toString(),
+                name: user.name,
+                email: user.email,
+                image: user.image,
+              };
             }
           }
         } catch (dbErr) {
-          console.warn("Auth DB check failed, checking mock store:", dbErr);
+          console.warn("MongoDB auth check failed, checking mock store:", dbErr);
         }
 
         // 2. Fallback to mock store
         const mockUser = mockStore.getUserByEmail(email);
         if (mockUser) {
           if (mockUser.password) {
-            const isValid = await bcrypt.compare(credentials.password, mockUser.password);
-            if (isValid) {
-              return {
-                id: mockUser._id,
-                name: mockUser.name,
-                email: mockUser.email,
-              };
+            const isMatch = await bcrypt.compare(enteredPassword, mockUser.password);
+            if (!isMatch) {
+              return null;
             }
+            return {
+              id: mockUser._id,
+              name: mockUser.name,
+              email: mockUser.email,
+            };
           } else {
-            // Demo user without password requirement
+            // Default demo account
             return {
               id: mockUser._id,
               name: mockUser.name,
@@ -63,19 +70,8 @@ export const authOptions: NextAuthOptions = {
           }
         }
 
-        // If not found in mock store either, create a quick demo session for seamless UX
-        // when users test without having registered yet
-        const autoUser = mockStore.addUser({
-          name: email.split("@")[0] || "Patient",
-          email,
-          password: await bcrypt.hash(credentials.password, 10),
-        });
-
-        return {
-          id: autoUser._id,
-          name: autoUser.name,
-          email: autoUser.email,
-        };
+        // 3. User does not exist — do not authenticate
+        return null;
       },
     }),
   ],
